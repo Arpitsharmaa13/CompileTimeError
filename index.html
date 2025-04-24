@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting AI Bot - ConvoSumm</title>
+    <style>
+        /* ConvoSumm CSS */
+        body {
+            font-family: 'Comic Neue', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #c3cfe2 100%);
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .doodle {
+            position: absolute;
+            opacity: 0.3;
+            z-index: -1;
+            transition: transform 0.3s ease;
+        }
+
+        .doodle:hover {
+            transform: scale(1.2);
+        }
+
+        .glow {
+            box-shadow: 0 0 30px rgba(255, 180, 105, 0.776), 0 0 50px rgba(100, 149, 237, 0.5);
+        }
+
+        .animate-bounce-slow {
+            animation: bounce 4s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 105, 105, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 175, 105, 0.8); }
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.832);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 0;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            background: orange;
+        }
+
+        .progress-bar {
+            width: 80%;
+            background: #ddd;
+            height: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+        }
+
+        .progress-bar .progress {
+            width: 0%;
+            height: 100%;
+            background: orange;
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+
+        .divider {
+            width: 100px;
+            height: 4px;
+            background: orange;
+            margin: 20px auto;
+            transition: width 0.5s ease;
+        }
+
+        .cn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: orange;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .cn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Additional Styles */
+        .container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h h2 {
+            color: #333;
+        }
+
+        #transcription-output, #keypoints-output, #solutions-output {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar" id="navbar">
+        <a href="#home" class="cn">Home</a>
+        <a href="#features" class="cn">Features</a>
+        <a href="#demo" class="cn">Demo</a>
+    </div>
+
+    <!-- Doodle Decorations -->
+    <img src="https://via.placeholder.com/100x100.png?text=✨" class="doodle doodle-1" alt="Doodle 1">
+    <img src="https://via.placeholder.com/100x100.png?text=🌟" class="doodle doodle-2" alt="Doodle 2">
+    <img src="https://via.placeholder.com/100x100.png?text=🎉" class="doodle doodle-3" alt="Doodle 3">
+    <img src="https://via.placeholder.com/100x100.png?text=🚀" class="doodle doodle-4" alt="Doodle 4">
+    <img src="https://via.placeholder.com/100x100.png?text=💡" class="doodle doodle-5" alt="Doodle 5">
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="glow animate-pulse-glow text-4xl mb-4">Meeting AI Bot - ConvoSumm</h1>
+        <p class="text-lg mb-8">Your ultimate AI assistant for live transcription, keypoint extraction, document saving, Google Calendar integration, and solution suggestions!</p>
+
+        <!-- Feature Cards -->
+        <div id="features" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="feature-card animate_animated animate_bounceIn">
+                <h2 class="text-2xl mb-2">Live Transcription</h2>
+                <p>Real-time speech-to-text for Google Meet, Zoom, and Teams. Never miss a word!</p>
+            </div>
+            <div class="feature-card animate_animated animatebounceIn animate_delay-1s">
+                <h2 class="text-2xl mb-2">Keypoint Extraction</h2>
+                <p>Automatically identifies and summarizes key decisions and action items.</p>
+            </div>
+            <div class="feature-card animate_animated animatebounceIn animate_delay-2s">
+                <h2 class="text-2xl mb-2">Document Saving</h2>
+                <p>Saves transcripts and keypoints as downloadable documents.</p>
+            </div>
+            <div class="feature-card animate_animated animatebounceIn animate_delay-3s">
+                <h2 class="text-2xl mb-2">Google Calendar</h2>
+                <p>Auto-saves events and deadlines to your Google Calendar.</p>
+            </div>
+            <div class="feature-card animate_animated animatebounceIn animate_delay-4s">
+                <h2 class="text-2xl mb-2">Solution Suggestions</h2>
+                <p>Provides AI-driven answers to questions raised during meetings.</p>
+            </div>
+        </div>
+
+        <!-- Demo Section -->
+        <div id="demo" class="mt-12">
+            <h2 class="text-3xl mb-4 glow">Try the Demo</h2>
+            <button id="start-meeting" class="cn glow mb-4">Start Mock Meeting</button>
+            <div class="progress-bar">
+                <div class="progress" id="transcription-progress"></div>
+            </div>
+            <div id="transcription-output" class="animate_animated animate_fadeIn">Transcription will appear here...</div>
+            <div id="keypoints-output" class="animate_animated animate_fadeIn">Keypoints will appear here...</div>
+            <div id="solutions-output" class="animate_animated animate_fadeIn">Solutions will appear here...</div>
+            <a href="#" id="download-document" class="cn glow mt-4 hidden">Download Document</a>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider animate_animated animate_zoomIn"></div>
+
+        <!-- Call to Action -->
+        <a href="#" class="cn glow text-lg">Get Started with ConvoSumm!</a>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // WebSocket for real-time transcription
+        const ws = new WebSocket('ws://localhost:3000');
+        const transcriptionOutput = document.getElementById('transcription-output');
+        const keypointsOutput = document.getElementById('keypoints-output');
+        const solutionsOutput = document.getElementById('solutions-output');
+        const progressBar = document.getElementById('transcription-progress');
+        const downloadLink = document.getElementById('download-document');
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'transcription') {
+                transcriptionOutput.textContent = data.text;
+                progressBar.style.width = ${Math.min(data.progress, 100)}%;
+            } else if (data.type === 'keypoints') {
+                keypointsOutput.textContent = data.text;
+            } else if (data.type === 'solutions') {
+                solutionsOutput.textContent = data.text;
+            } else if (data.type === 'document') {
+                downloadLink.href = data.url;
+                downloadLink.classList.remove('hidden');
+            }
+        };
+
+        // Start mock meeting
+        document.getElementById('start-meeting').addEventListener('click', () => {
+            ws.send(JSON.stringify({ action: 'start_meeting' }));
+            transcriptionOutput.textContent = 'Starting transcription...';
+            keypointsOutput.textContent = 'Extracting keypoints...';
+            solutionsOutput.textContent = 'Generating solutions...';
+            progressBar.style.width = '10%';
+        });
+    </script>
+</body>
+</html>

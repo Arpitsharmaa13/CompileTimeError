@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting AI Analysis</title>
+  <style>
+    body {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #c3cfe2 100%);
+        padding: 24px;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+    h1 {
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section {
+      margin-bottom: 48px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background-color: white;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .card h3 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: #4b5563;
+      margin: 0;
+    }
+    .transcript-entry {
+      margin-bottom: 16px;
+    }
+    .transcript-entry .time {
+      color: #6b7280;
+      font-size: 14px;
+    }
+    .transcript-entry .speaker {
+      font-weight: 500;
+    }
+    .transcript-entry .text {
+      color: #374151;
+    }
+    .event {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .event-details p {
+      margin: 0;
+    }
+    .event-details .title {
+      font-weight: 500;
+    }
+    .event-details .date-time {
+      color: #4b5563;
+    }
+    .calendar-btn {
+      background-color: #3b82f6;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .calendar-btn:hover {
+      background-color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Meeting AI Analysis</h1>
+
+    <!-- Speaker Analysis -->
+    <div class="section">
+      <h2>Speaker Time Analysis</h2>
+      <div class="grid" id="speakers"></div>
+    </div>
+
+    <!-- Transcript -->
+    <div class="section">
+      <h2>Meeting Transcript</h2>
+      <div class="card" id="transcript"></div>
+    </div>
+
+    <!-- Important Dates -->
+    <div class="section">
+      <h2>Important Dates</h2>
+      <div class="card" id="important-dates"></div>
+    </div>
+  </div>
+
+  <script>
+    // Sample data
+    const speakers = [
+      { name: "Alice Johnson", time: "15:32" },
+      { name: "Bob Smith", time: "10:45" },
+      { name: "Carol White", time: "8:20" },
+    ];
+
+    const transcript = [
+      { speaker: "Alice Johnson", time: "00:01", text: "Good morning, let's start the meeting." },
+      { speaker: "Bob Smith", time: "00:03", text: "I have the project updates ready." },
+      { speaker: "Carol White", time: "00:05", text: "Can we discuss the timeline?" },
+      { speaker: "Alice Johnson", time: "00:07", text: "Sure, let's set a date for the next milestone." },
+    ];
+
+    const importantDates = [
+      { title: "Project Milestone", date: "2025-05-15", time: "10:00" },
+      { title: "Team Review", date: "2025-05-20", time: "14:00" },
+    ];
+
+    // Function to generate Google Calendar URL
+    function saveToGoogleCalendar(event) {
+      const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.date.replace(/-/g, '')}T${event.time.replace(/:/g, '')}00Z/${event.date.replace(/-/g, '')}T${event.time.replace(/:/g, '')}00Z`;
+      window.open(calendarUrl, '_blank');
+    }
+
+    // Render speakers
+    const speakersContainer = document.getElementById('speakers');
+    speakers.forEach(speaker => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${speaker.name}</h3>
+        <p>Speaking Time: ${speaker.time}</p>
+      `;
+      speakersContainer.appendChild(card);
+    });
+
+    // Render transcript
+    const transcriptContainer = document.getElementById('transcript');
+    transcript.forEach(entry => {
+      const entryDiv = document.createElement('div');
+      entryDiv.className = 'transcript-entry';
+      entryDiv.innerHTML = `
+        <p class="time">${entry.time}</p>
+        <p class="speaker">${entry.speaker}</p>
+        <p class="text">${entry.text}</p>
+      `;
+      transcriptContainer.appendChild(entryDiv);
+    });
+
+    // Render important dates
+    const datesContainer = document.getElementById('important-dates');
+    importantDates.forEach(event => {
+      const eventDiv = document.createElement('div');
+      eventDiv.className = 'event';
+      eventDiv.innerHTML = `
+        <div class="event-details">
+          <p class="title">${event.title}</p>
+          <p class="date-time">${event.date} at ${event.time}</p>
+        </div>
+      `;
+      const button = document.createElement('button');
+      button.className = 'calendar-btn';
+      button.textContent = 'Add to Google Calendar';
+      button.onclick = () => saveToGoogleCalendar(event);
+      eventDiv.appendChild(button);
+      datesContainer.appendChild(eventDiv);
+    });
+  </script>
+</body>
+</html>
